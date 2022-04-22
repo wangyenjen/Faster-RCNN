@@ -1,0 +1,88 @@
+CHECKING MINDRECORD FILES ...
+CHECKING MINDRECORD FILES DONE!
+Start Eval!
+Start create dataset!
+Create dataset done!
+Done 2
+Done 3
+Done 4
+loading annotations into memory...
+Done (t=0.01s)
+creating index...
+index created!
+
+========================================
+
+total images num:  50
+Processing, please wait a moment.
+Iter 1 cost time 15.532789707183838
+Iter 2 cost time 14.269622087478638
+Iter 3 cost time 13.792679071426392
+Iter 4 cost time 13.656776428222656
+Iter 5 cost time 13.84125804901123
+Iter 6 cost time 9.02150011062622
+Iter 7 cost time 9.192846775054932
+Iter 8 cost time 9.285316705703735
+Iter 9 cost time 8.956685781478882
+Iter 10 cost time 8.891640186309814
+Iter 11 cost time 7.428397178649902
+Iter 12 cost time 6.582587718963623
+Iter 13 cost time 7.108155727386475
+Iter 14 cost time 7.152310609817505
+Iter 15 cost time 6.930729389190674
+Iter 16 cost time 5.397412538528442
+Iter 17 cost time 5.657991409301758
+Iter 18 cost time 5.5419533252716064
+Iter 19 cost time 5.972199201583862
+Iter 20 cost time 5.848507404327393
+Iter 21 cost time 4.806057453155518
+Iter 22 cost time 5.353050947189331
+Iter 23 cost time 5.3855531215667725
+Iter 24 cost time 4.916746139526367
+Iter 25 cost time 5.322739839553833
+Iter 26 cost time 4.767176389694214
+Iter 27 cost time 4.880528211593628
+Iter 28 cost time 5.587824583053589
+Iter 29 cost time 5.09980034828186
+Iter 30 cost time 4.993346452713013
+Iter 31 cost time 4.661987781524658
+Iter 32 cost time 4.9811859130859375
+Iter 33 cost time 4.608878135681152
+Iter 34 cost time 4.570252895355225
+Iter 35 cost time 5.086978435516357
+Iter 36 cost time 4.892663955688477
+Iter 37 cost time 4.883477687835693
+Iter 38 cost time 4.949660539627075
+Iter 39 cost time 5.422166585922241
+Iter 40 cost time 4.634921550750732
+Iter 41 cost time 4.804890394210815
+Iter 42 cost time 4.960494756698608
+Iter 43 cost time 4.693283319473267
+Iter 44 cost time 4.98244309425354
+Iter 45 cost time 4.7406299114227295
+Iter 46 cost time 5.48620080947876
+Iter 47 cost time 4.784097909927368
+Iter 48 cost time 5.249894380569458
+Iter 49 cost time 5.229933023452759
+Iter 50 cost time 4.955785274505615
+Loading and preparing results...
+DONE (t=0.07s)
+creating index...
+index created!
+Running per image evaluation...
+Evaluate annotation type *bbox*
+DONE (t=0.46s).
+Accumulating evaluation results...
+DONE (t=0.25s).
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.431
+ Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=100 ] = 0.636
+ Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets=100 ] = 0.488
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = 0.281
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = 0.496
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = 0.551
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=  1 ] = 0.379
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets= 10 ] = 0.549
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.575
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = 0.392
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = 0.608
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = 0.685
