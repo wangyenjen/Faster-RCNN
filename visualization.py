@@ -169,8 +169,8 @@ for image_info in coco_d:
                 cv2.rectangle(img, (x, y), (x+w,y+h), color[bbox['category_id']],2)
                 cv2.putText(img, str(bbox['category_id'])+" :  "+str(round(bbox['score'],3)), (x, y-8), cv2.FONT_HERSHEY_COMPLEX, 0.3, color[bbox['category_id']], 1, cv2.LINE_AA)
         
-        cv2.imshow(img_name, img)
-        cv2.waitKey(0)
+        # cv2.imshow(img_name, img)
+        # cv2.waitKey(0)
         cv2.imwrite('result/'+img_name, img)
         cv2.destroyWindow(img_name) 
         
@@ -203,8 +203,8 @@ for image_id in img_dict:
         cv2.rectangle(img, (x, y), (x+w,y+h), color[bbox[1]],2)
         cv2.putText(img, str(bbox[1]), (x, y-8), cv2.FONT_HERSHEY_COMPLEX, 0.5, color[bbox[1]], 1, cv2.LINE_AA)
         
-    cv2.imshow("gt"+img_name, img)
-    cv2.waitKey(0)
+    # cv2.imshow("gt"+img_name, img)
+    # cv2.waitKey(0)
     
     cv2.imwrite('result/'+'gt_'+img_name, img)
     cv2.destroyWindow("gt"+img_name)
