@@ -51,45 +51,45 @@ def fasterrcnn_eval(dataset_path, ckpt_path, ann_file):
     device_num = 1
 
     print("Start create dataset!", flush=True)
-
-    # === 1. Create dataset for inference and evaluation. ===
+    # create the dataset, reference: train.py
+    # When create MindDataset, using the fitst mindrecord file, such as FasterRcnn.mindrecord0.
     dataset = create_fasterrcnn_dataset(dataset_path, batch_size=config.test_batch_size,
                                         device_num=device_num, rank_id=rank,
                                         num_parallel_workers=config.num_parallel_workers,
                                         python_multiprocessing=config.python_multiprocessing,
                                         is_training=False)
     dataset_coco = COCO(ann_file)
+
     dataset_size = dataset.get_dataset_size()
     print("Create dataset done!", flush=True)
-    # ======================================================
 
-
-    # ================== 2. Load model. ====================
+    # create the network
     net = Faster_Rcnn_Resnet50(config=config)
 
+    # load checkpoints
     load_path = ckpt_path
     param_dict = load_checkpoint(load_path)
     load_param_into_net(net, param_dict)
 
+    # set as eval mode
     net = net.set_train(False)
-    # ======================================================
 
-
-    # === For each batch, generate the bbox for each single image. ===
+    # eval loop
     eval_iter = 0
     outputs = []
+
     max_num = 128
     for data in dataset.create_dict_iterator(num_epochs=1):
         eval_iter += 1
         print("{}-iteration.".format(eval_iter))
-
+        # load image and gt
         img_data, img_shape = data['image'], data['image_shape']
         gt_bboxes, gt_labels, gt_num = data['box'], data['label'], data['valid_num']
-
+        # get inference res
         res = net(img_data, img_shape, gt_bboxes, gt_labels, gt_num)
 
         res_bboxes, res_labels, res_masks = res[0], res[1], res[2]
-
+        # operate for each eval image
         for i in range(config.test_batch_size):
             res_mask = np.squeeze(res_masks.asnumpy()[i, :, :])
 
@@ -99,17 +99,13 @@ def fasterrcnn_eval(dataset_path, ckpt_path, ann_file):
             if res_bbox.shape[0] > max_num:
                 idx = np.argsort(-res_bbox[:, -1])[:max_num]
                 res_bbox, res_label = res_bbox[idx], res_label[idx]
-
+            # get results from 1 image
             output_1image = bbox2result_1image(res_bbox, res_label, config.num_classes)
             outputs.append(output_1image)
-    # =================================================================
-
-    
-
-    # === 4. Store the result as json format and evaluate the performance. ===
+    # store results on the test set
     result_files = results2json(dataset_coco, outputs, "./output")
+    # eval the results
     coco_eval(result_files, ["bbox"], dataset_coco, single_result=True)
-    # ========================================================================
 
 
 if __name__ == '__main__':
@@ -139,3 +135,4 @@ if __name__ == '__main__':
     print("CHECKING MINDRECORD FILES DONE!", flush=True)
     print("Start Eval!", flush=True)
     fasterrcnn_eval(mindrecord_file, args_opt.checkpoint_path, args_opt.ann_file)
+

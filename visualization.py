@@ -3,6 +3,7 @@ import numpy as np
 import json
 import cv2 
 
+# box color
 color = [ 
 (128,0,0),
 (139,0,0),
@@ -147,12 +148,12 @@ if not os.path.exists('result'):
 
 per_img = []
 flag = 0
-
+# load the eval res
 with open(json_file, 'r') as f:
     coco_d = json.load(f)
 
 for image_info in coco_d:
-
+    # get 1 image
     if not flag or flag == image_info["image_id"]:
         per_img.append(image_info)
 
@@ -160,7 +161,7 @@ for image_info in coco_d:
         img_name = str(flag).zfill(12)  + '.jpg'
         img_full = os.path.join(img_folder, img_name)
         img = cv2.imread(img_full)
-    
+        # add bbox and text(label) to the image 
         for bbox in per_img:
             
             if bbox['score'] >= 0.5:
@@ -171,6 +172,7 @@ for image_info in coco_d:
         
         # cv2.imshow(img_name, img)
         # cv2.waitKey(0)
+        # store the image
         cv2.imwrite('result/'+img_name, img)
         cv2.destroyWindow(img_name) 
         
@@ -180,22 +182,24 @@ for image_info in coco_d:
     flag = image_info['image_id']    
 
 #%%
+# load the gts
 with open(ann_file, 'r') as f:
     coco_ann = json.load(f)
 
 img_dict = {}
-
+# get image info and store in dict
 for image_info in coco_ann['annotations']:
     
     img_dict.setdefault(image_info['image_id'],[])
     img_dict[image_info['image_id']].append([image_info['bbox'],image_info['category_id']])
 
+# operate for each image
 for image_id in img_dict:
     
     img_name = str(image_id).zfill(12)  + '.jpg'
     img_full = os.path.join(img_folder, img_name)
     img = cv2.imread(img_full)
-    
+    # add bbox and text(label) to the image 
     for bbox in img_dict[image_id]:
 
         x, y, w, h = bbox[0]
@@ -205,6 +209,7 @@ for image_id in img_dict:
         
     # cv2.imshow("gt"+img_name, img)
     # cv2.waitKey(0)
-    
+    # store the image
     cv2.imwrite('result/'+'gt_'+img_name, img)
     cv2.destroyWindow("gt"+img_name)
+
