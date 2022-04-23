@@ -3,15 +3,6 @@ import numpy as np
 import json
 import cv2 
 
-img_folder = "coco/demo_val2017"
-json_file ="output.bbox.json"
-
-with open(json_file, 'r') as f:
-    coco_d = json.load(f)
-
-per_img = []
-flag = 0
-
 color = [ 
 (128,0,0),
 (139,0,0),
@@ -144,10 +135,24 @@ color = [
 (240,255,255),
 (255,250,250)]
 
+img_folder = "coco/demo_val2017"
+json_file ="output.bbox.json"
+ann_file = "coco/annotations/instances_demo_val2017.json"
 
+if not os.path.exists('result'):
+        os.makedirs('result')
+
+
+# %%
+
+per_img = []
+flag = 0
+
+with open(json_file, 'r') as f:
+    coco_d = json.load(f)
 
 for image_info in coco_d:
-    #print(image_info)
+
     if not flag or flag == image_info["image_id"]:
         per_img.append(image_info)
 
@@ -155,13 +160,10 @@ for image_info in coco_d:
         img_name = str(flag).zfill(12)  + '.jpg'
         img_full = os.path.join(img_folder, img_name)
         img = cv2.imread(img_full)
-        print(img.shape)
-        #cv2.imshow('My Image', img)
-        #cv2.waitKey(0)
+    
         for bbox in per_img:
             
             if bbox['score'] >= 0.5:
-
                 x, y, w, h = bbox['bbox']
                 x, y, w, h = int(x), int(y), int(w), int(h)
                 cv2.rectangle(img, (x, y), (x+w,y+h), color[bbox['category_id']],2)
@@ -169,11 +171,40 @@ for image_info in coco_d:
         
         cv2.imshow(img_name, img)
         cv2.waitKey(0)
-
-            
+        cv2.imwrite('result/'+img_name, img)
+        cv2.destroyWindow(img_name) 
+        
         per_img = []
-        print(image_info)
         per_img.append(image_info)
-        cv2.destroyWindow(img_name)
 
     flag = image_info['image_id']    
+
+#%%
+with open(ann_file, 'r') as f:
+    coco_ann = json.load(f)
+
+img_dict = {}
+
+for image_info in coco_ann['annotations']:
+    
+    img_dict.setdefault(image_info['image_id'],[])
+    img_dict[image_info['image_id']].append([image_info['bbox'],image_info['category_id']])
+
+for image_id in img_dict:
+    
+    img_name = str(image_id).zfill(12)  + '.jpg'
+    img_full = os.path.join(img_folder, img_name)
+    img = cv2.imread(img_full)
+    
+    for bbox in img_dict[image_id]:
+
+        x, y, w, h = bbox[0]
+        x, y, w, h = int(x), int(y), int(w), int(h)
+        cv2.rectangle(img, (x, y), (x+w,y+h), color[bbox[1]],2)
+        cv2.putText(img, str(bbox[1]), (x, y-8), cv2.FONT_HERSHEY_COMPLEX, 0.5, color[bbox[1]], 1, cv2.LINE_AA)
+        
+    cv2.imshow("gt"+img_name, img)
+    cv2.waitKey(0)
+    
+    cv2.imwrite('result/'+'gt_'+img_name, img)
+    cv2.destroyWindow("gt"+img_name)
